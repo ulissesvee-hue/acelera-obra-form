@@ -632,15 +632,25 @@
     if(window.matchMedia("(max-width:900px)").matches){ window.scrollTo({top:0, behavior:"smooth"}); }
   }
 
+  // Envia o lead para /api/lead, que repassa para a Clint CRM.
+  // Não bloqueia a tela de agradecimento: se falhar, o lead ainda tem o
+  // botão do WhatsApp como caminho alternativo.
+  function enviarLead(){
+    try{
+      fetch("/api/lead", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(state.answers),
+        keepalive:true
+      }).then(function(r){
+        if(!r.ok) console.error("Falha ao enviar lead para a Clint:", r.status);
+      }).catch(function(e){ console.error("Erro ao enviar lead:", e); });
+    }catch(e){ console.error("Erro ao enviar lead:", e); }
+  }
+
   function submitForm(){
     saveCurrent();
-    // -------------------------------------------------------------
-    // INTEGRAÇÃO: envie state.answers para o seu CRM / webhook aqui.
-    // Ex.: fetch("https://SEU-ENDPOINT", {method:"POST",
-    //        headers:{"Content-Type":"application/json"},
-    //        body: JSON.stringify(state.answers)});
-    // -------------------------------------------------------------
-    console.log("Lead Acelera Obra:", state.answers);
+    enviarLead();
 
     form.style.display="none";
     progressWrap.style.display="none";

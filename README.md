@@ -1,66 +1,103 @@
 # Acelera Obra — Formulário de captação
 
-Página de formulário multi-etapas (estilo Typeform), inspirada na estrutura do formulário da V4 Company e recriada com a identidade visual da **Acelera Obra**. Focada em lojas de tintas e materiais de construção. Responsiva, com prioridade para o celular.
+Landing page de formulário multi-etapas (estilo Typeform), inspirada na estrutura do formulário da V4 Company e recriada com a identidade visual da **Acelera Obra**. Focada em lojas de tintas e materiais de construção. Responsiva (mobile-first) — no celular as perguntas ocupam a primeira dobra.
 
-## Como usar
+Os leads são enviados para a **Clint CRM**.
 
-Abra o `index.html` em qualquer navegador, ou publique a pasta inteira em qualquer hospedagem estática (Vercel, Netlify, GitHub Pages, Hostinger, etc.).
+## No ar
 
-Para testar localmente com servidor:
+- **Produção (Vercel):** https://acelera-obra-form.vercel.app
+- **Repositório:** https://github.com/ulissesvee-hue/acelera-obra-form
 
-```bash
-cd acelera-obra-form
-python3 -m http.server 8777
-# acesse http://localhost:8777
-```
+> O deploy da Vercel é **manual**: `git push` não publica sozinho. Rode `vercel deploy --prod` após as alterações (ou conecte o repositório em Project → Settings → Git para deploy automático).
 
 ## Estrutura
 
 ```
 acelera-obra-form/
 ├── index.html            # página completa (HTML + CSS + JS)
+├── api/
+│   └── lead.js           # função serverless: recebe o lead e repassa para a Clint
 ├── assets/
-│   ├── logo-dark.png     # logo para fundo escuro (usada no painel lateral)
-│   ├── logo-light.png    # logo para fundo claro (usada no cabeçalho do form)
-│   └── clientes/         # coloque aqui as logos dos clientes
+│   ├── logo-dark.png     # logo para fundo escuro (painel lateral)
+│   ├── logo-light.png    # logo para fundo claro (cabeçalho do form)
+│   └── clientes/         # logos dos clientes (prova social)
 └── README.md
 ```
 
-## O que ainda precisa ser feito / personalizado
+## Integração com a Clint CRM
 
-0. ~~WhatsApp da Acelera Obra~~ — ✅ configurado: **+55 (48) 98828-0871**. O botão "Chamar especialista da Acelera Obra" (tela final) abre o WhatsApp com uma mensagem pré-preenchida com nome, loja, tipo e cidade/UF do lead. Para trocar o número, edite no topo do `<script>` do `index.html`:
-   ```js
-   var WHATSAPP_ACELERA = "5548988280871"; // DDI 55 + DDD + número, só dígitos
+O formulário faz `POST /api/lead`, e a função serverless repassa para o webhook da Clint.
+
+**Por que existe essa função no meio** (o navegador não chama a Clint direto):
+1. **CORS** — a Clint exige `Content-Type: application/json`, o que dispara preflight e o navegador bloqueia.
+2. **Segurança** — o repositório é público. A URL do webhook fica em variável de ambiente, nunca no código; caso contrário qualquer um poderia injetar leads falsos no CRM.
+
+### Configuração (uma vez)
+
+1. Na Clint: **Configurações → Integrações → + Nova Integração → Webhook → Receber → Começar**.
+2. Copie a URL gerada e mapeie os campos (a Clint identifica o contato por **e-mail e/ou telefone**).
+3. Cadastre a URL como variável de ambiente na Vercel:
+   ```bash
+   vercel env add CLINT_WEBHOOK_URL production
+   # cole a URL quando pedir, depois republique:
+   vercel deploy --prod
    ```
 
-1. **Logos dos clientes** — 8 já adicionadas (ABC da Construção, Baratão das Tintas, BM Constru Center, Decor Colors, Geniomar Construções, In9ve, Rede Bem Viver, Rede Construir Rio Pardo), em cards brancos no painel escuro. Os arquivos estão em `assets/clientes/`. Para adicionar/trocar, edite o bloco `clientsGrid` em `index.html`:
-   ```html
-   <div class="client"><img src="assets/clientes/arquivo.png" alt="Nome do cliente"></div>
-   ```
-   As logos aparecem só na 1ª etapa (prova social).
+### Payload enviado para a Clint
 
-2. **Depoimentos** — os textos em `QUOTES` (dentro do `<script>`) são **placeholders**. Substitua pelos depoimentos reais de clientes da Acelera Obra.
+```json
+{
+  "nome": "João Pereira",
+  "email": "joao@construsilva.com.br",
+  "telefone": "5548988280871",
+  "telefone_formatado": "(48) 98828-0871",
+  "tipo_loja": "Material de Construção",
+  "loja": "Constru Silva",
+  "cidade_estado": "Florianópolis, SC",
+  "faturamento": "Acima de R$ 500 mil",
+  "objetivo": "Aumentar o Faturamento",
+  "urgencia": "Prioridade Alta: preciso resolver o mais rápido possível",
+  "origem": "Landing Acelera Obra",
+  "enviado_em": "2026-07-16T20:09:05.291Z"
+}
+```
 
-3. **Integração do envio** — hoje o formulário só faz `console.log` dos dados. Na função `submitForm()` há um trecho comentado indicando onde enviar `state.answers` para o seu CRM/webhook. Ex.:
-   ```js
-   fetch("https://SEU-ENDPOINT", {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify(state.answers)
-   });
-   ```
+> ⚠️ **A função serverless só roda na Vercel.** Se a página for publicada no GitHub Pages (ou em qualquer host estático), `/api/lead` não existe e **os leads se perdem em silêncio**. Use a Vercel como endereço oficial.
 
-4. **Termos de uso / Política de privacidade** — os links no rodapé estão como `#`. Aponte para as páginas reais.
+### Testar localmente
 
-## Campos coletados (`state.answers`)
+```bash
+# terminal 1 — simula a Clint
+node -e 'require("http").createServer((q,s)=>{let b="";q.on("data",c=>b+=c);q.on("end",()=>{console.log(b);s.end("{}")})}).listen(9911)'
+
+# terminal 2
+CLINT_WEBHOOK_URL="http://localhost:9911" vercel dev --listen 3010
+# acesse http://localhost:3010
+```
+
+Só o front (sem a API): `python3 -m http.server 8777`.
+
+## Campos coletados
 
 `nome`, `whatsapp`, `email`, `tipo_loja`, `loja`, `cidade_estado`, `faturamento`, `objetivo`, `urgencia`.
+
+## Personalização
+
+- **WhatsApp** — o botão "Chamar especialista da Acelera Obra" (tela final) usa o número no topo do `<script>`:
+  ```js
+  var WHATSAPP_ACELERA = "5548988280871"; // DDI 55 + DDD + número, só dígitos
+  ```
+- **Logos dos clientes** — 8 em `assets/clientes/`, exibidas em todas as etapas. Para trocar, edite o bloco `clientsGrid` no `index.html`:
+  ```html
+  <div class="client"><img src="assets/clientes/arquivo.png" alt="Nome do cliente"></div>
+  ```
+- **Depoimentos** — array `QUOTES` no `<script>`, um por etapa.
+- **Termos de uso / Política de privacidade** — os links do rodapé ainda estão como `#`; aponte para as páginas reais.
 
 ## Identidade visual
 
 - Amarelo/dourado: `#F2C633`
 - Grafite escuro: `#1D201A`
 - Off-white: `#F7F6F1`
-- Fonte: Poppins (Google Fonts)
-
-> Observação: a fonte Poppins é carregada do Google Fonts (requer internet). Se precisar funcionar 100% offline, baixe a fonte e sirva localmente.
+- Fonte: Poppins (Google Fonts — requer internet)
