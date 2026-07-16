@@ -82,12 +82,6 @@
     margin-block:auto;padding:40px 0; /* centraliza entre a logo (topo) e o rodapé */
     max-width:440px;
   }
-  .brand__eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--yellow);margin-bottom:18px;
-  }
-  .brand__eyebrow::before{content:"";width:26px;height:2px;background:var(--yellow);border-radius:2px}
   .brand__title{
     font-size:clamp(30px,3vw,46px);
     font-weight:800;line-height:1.05;letter-spacing:-.02em;
@@ -98,7 +92,7 @@
   }
 
   /* client logos */
-  .clients{margin-top:34px;display:none}
+  .clients{margin-top:34px}
   .clients__label{
     font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);
     margin-bottom:16px;font-weight:600;
@@ -294,7 +288,6 @@
     .brand::before{opacity:.7}
     .brand__logo{display:none} /* a logo já aparece no topo do formulário */
     .brand__body{margin-top:0;padding-top:0;text-align:center;max-width:520px;margin-inline:auto}
-    .brand__eyebrow{margin-inline:auto}
     .brand__title{font-size:clamp(24px,7vw,32px)}
     .brand__sub{margin-inline:auto}
     .clients__grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-inline:auto}
@@ -307,8 +300,6 @@
     .legal{max-width:640px}
   }
 
-  /* logos dos clientes: só na 1ª etapa */
-  .brand[data-step-index="0"] .clients{display:block}
 
   @media (max-width:420px){
     .clients__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -318,12 +309,11 @@
 <body>
   <main class="app">
     <!-- ================= BRAND / LEFT ================= -->
-    <aside class="brand" id="brand" data-step-index="0">
+    <aside class="brand">
       <img class="brand__logo" src="assets/logo-dark.png" alt="Acelera Obra" />
       <div class="brand__body">
-        <span class="brand__eyebrow" id="brandEyebrow">Marketing &amp; vendas</span>
-        <h1 class="brand__title" id="brandTitle">Junte-se às maiores lojas de <b>tintas e construção</b></h1>
-        <p class="brand__sub" id="brandSub">Veja as lojas que aceleraram as vendas com a Acelera Obra.</p>
+        <h1 class="brand__title">Junte-se às <b>maiores</b></h1>
+        <p class="brand__sub">Veja abaixo as lojas que contaram com a ajuda do Acelera Obra para alavancar suas vendas.</p>
 
         <div class="clients" id="clients">
           <p class="clients__label">Quem já acelera com a gente</p>
@@ -436,29 +426,17 @@
       options:["Prioridade Alta: preciso resolver o mais rápido possível","Prioridade Média: tenho outros desafios mais importantes","Prioridade Baixa: estou apenas curioso"] }
   ];
 
-  var BRAND = [
-    { eyebrow:"", title:"Junte-se às <b>maiores</b>", sub:"Veja abaixo as lojas que contaram com a ajuda do Acelera Obra para alavancar suas vendas." },
-    { eyebrow:"Time completo", title:"O time de <b>marketing e vendas</b> da sua loja", sub:"Tráfego pago, CRM, treinamento comercial e IA no atendimento." },
-    { eyebrow:"Sem enrolação", title:"Contato direto, <b>sem spam</b>", sub:"Usamos seus dados apenas para falar sobre o crescimento da sua loja." },
-    { eyebrow:"Especialistas", title:"Especialistas no seu <b>tipo de loja</b>", sub:"Tintas, construção, elétrica, hidráulica e pisos — a gente entende do seu mercado." },
-    { eyebrow:"Sua loja", title:"Feito sob medida para a <b>sua loja</b>", sub:"Estratégia pensada para a realidade do seu negócio." },
-    { eyebrow:"Alcance", title:"Atendemos lojas de <b>todo o Brasil</b>", sub:"Onde a sua loja estiver, a gente ajuda a vender mais." },
-    { eyebrow:"Previsibilidade", title:"Mais vendas, de forma <b>previsível</b>", sub:"Geração de demanda e campanhas que enchem a loja." },
-    { eyebrow:"Foco no objetivo", title:"Do seu <b>objetivo</b> ao resultado", sub:"Marketing, comercial e gestão conectados para você bater a meta." },
-    { eyebrow:"Bora começar", title:"Vamos <b>acelerar</b> a sua obra", sub:"Quanto antes começar, antes os resultados aparecem." }
-  ];
-
-  // Depoimentos PLACEHOLDER — substitua pelos reais dos seus clientes.
+  /* Depoimentos reais de clientes — um por etapa. */
   var QUOTES = [
-    { text:"Depois da Acelera Obra, o comercial ficou organizado e as vendas passaram a ser previsíveis.", author:"Lojista parceiro • Loja de tintas" },
-    { text:"Aumentamos o movimento na loja com as campanhas. O time comercial nunca vendeu tanto.", author:"Proprietário • Material de construção" },
-    { text:"A inteligência artificial no atendimento não deixa nenhum cliente sem resposta — e isso virou venda.", author:"Gerente • Home center" },
-    { text:"Hoje eu sei exatamente de onde vêm meus clientes e quanto cada real investido me retorna.", author:"Sócio • Tintas e construção" },
-    { text:"Saímos do achismo. Passamos a acompanhar indicadores e a bater meta todo mês.", author:"Lojista parceiro • Varejo de construção" },
-    { text:"O treinamento comercial mudou a forma como a minha equipe atende e fecha vendas.", author:"Proprietária • Loja de tintas" },
-    { text:"Com o CRM organizado, paramos de perder orçamento e o pós-venda virou recompra.", author:"Gerente comercial • Material de construção" },
-    { text:"A parceria vai muito além de marketing: é gente pensando no crescimento da minha loja junto comigo.", author:"Sócio • Home center" },
-    { text:"Investimento que se paga. O retorno das campanhas apareceu já nos primeiros meses.", author:"Proprietário • Tintas e construção" }
+    { text:"Com a Acelera Obra, conseguimos organizar marketing, vendas e processos para crescer com mais padrão e previsibilidade.", author:"Rede Baratão das Tintas • Rede de lojas de tintas" },
+    { text:"Depois da Acelera Obra, saímos da estagnação e começamos a alcançar resultados muito acima do que imaginávamos.", author:"Armazém da Construção • Material de construção" },
+    { text:"O método trouxe mais organização para o marketing e o comercial, e hoje temos muito mais previsibilidade no faturamento.", author:"Nova Barra • Material de construção" },
+    { text:"A Acelera Obra nos ajudou a alinhar a operação, estruturar o comercial e crescer de forma consistente.", author:"Niles • Material de construção" },
+    { text:"Com a aplicação do método, saímos do prejuízo e entramos em uma rota de crescimento sustentável.", author:"Inove • Material de construção" },
+    { text:"Desde a inauguração, a Acelera Obra nos deu direção, estratégia e estrutura para crescer com consistência.", author:"Construsilva • Loja de tintas" },
+    { text:"Depois da Acelera Obra, organizamos a operação, estruturamos o comercial e voltamos a crescer com segurança.", author:"Pinta Mundi Itupeva • Loja de tintas" },
+    { text:"A organização do marketing e do comercial fez a loja evoluir rapidamente e alcançar resultados maiores.", author:"Bodas • Materiais elétricos e hidráulicos" },
+    { text:"Com a Acelera Obra, conseguimos estruturar o comercial, crescer com consistência e superar a meta da loja.", author:"Roma Tintas • Loja de tintas" }
   ];
 
   /* ---------------- Estado ---------------- */
@@ -466,10 +444,6 @@
   var TOTAL = STEPS.length;
 
   var form        = document.getElementById("form");
-  var brand       = document.getElementById("brand");
-  var brandEyebrow= document.getElementById("brandEyebrow");
-  var brandTitle  = document.getElementById("brandTitle");
-  var brandSub    = document.getElementById("brandSub");
   var backBtn     = document.getElementById("backBtn");
   var progressBar = document.getElementById("progressBar");
   var progressLabel = document.getElementById("progressLabel");
@@ -624,15 +598,8 @@
     if(c && window.matchMedia("(min-width:901px)").matches){ setTimeout(function(){ c.focus(); }, 60); }
   }
 
+  // O painel lateral (prova social) é fixo — igual em todas as etapas.
   function updateChrome(i){
-    var b = BRAND[i] || BRAND[0];
-    brandEyebrow.textContent = b.eyebrow;
-    brandEyebrow.style.display = b.eyebrow ? "" : "none";
-    brandTitle.innerHTML = b.title;
-    brandSub.innerHTML = b.sub;
-    brand.dataset.stepIndex = i;
-
-    var pct = Math.round(((i)/(TOTAL))*100);
     var pctShown = Math.round(((i+1)/TOTAL)*100);
     progressBar.style.width = pctShown + "%";
     progressLabel.textContent = "Etapa "+(i+1)+" de "+TOTAL;
@@ -684,8 +651,6 @@
     buildWhatsappLink();
     doneScreen.classList.add("is-active");
     progressBar.style.width="100%";
-    // brand final
-    updateBrandFinal();
     scrollTop();
   }
 
@@ -700,13 +665,6 @@
     if(a.cidade_estado) msg += "\nCidade/UF: " + a.cidade_estado;
     document.getElementById("waBtn").href =
       "https://wa.me/" + WHATSAPP_ACELERA + "?text=" + encodeURIComponent(msg);
-  }
-
-  function updateBrandFinal(){
-    brandEyebrow.textContent="Obrigado!";
-    brandTitle.innerHTML="Recebemos o seu <b>contato</b>";
-    brandSub.innerHTML="Vamos analisar as informações da sua loja e um especialista falará com você em breve.";
-    brand.dataset.stepIndex="9";
   }
 
   backBtn.addEventListener("click", goBack);
