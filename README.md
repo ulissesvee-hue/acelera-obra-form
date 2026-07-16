@@ -28,11 +28,10 @@ acelera-obra-form/
 
 ## O que ainda precisa ser feito / personalizado
 
-0. **⚠️ WhatsApp da Acelera Obra** — o botão "Chamar especialista da Acelera Obra" (tela final) aponta para um número **placeholder**. Edite no topo do `<script>` do `index.html`:
+0. ~~WhatsApp da Acelera Obra~~ — ✅ configurado: **+55 (48) 98828-0871**. O botão "Chamar especialista da Acelera Obra" (tela final) abre o WhatsApp com uma mensagem pré-preenchida com nome, loja, tipo e cidade/UF do lead. Para trocar o número, edite no topo do `<script>` do `index.html`:
    ```js
-   var WHATSAPP_ACELERA = "5500000000000"; // DDI 55 + DDD + número, só dígitos
+   var WHATSAPP_ACELERA = "5548988280871"; // DDI 55 + DDD + número, só dígitos
    ```
-   O link já abre o WhatsApp com uma mensagem pré-preenchida com nome, loja, tipo e cidade/UF do lead.
 
 1. **Logos dos clientes** — 8 já adicionadas (ABC da Construção, Baratão das Tintas, BM Constru Center, Decor Colors, Geniomar Construções, In9ve, Rede Bem Viver, Rede Construir Rio Pardo), em cards brancos no painel escuro. Os arquivos estão em `assets/clientes/`. Para adicionar/trocar, edite o bloco `clientsGrid` em `index.html`:
    ```html
