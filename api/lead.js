@@ -17,12 +17,6 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Método não permitido" });
   }
 
-  const webhook = process.env.CLINT_WEBHOOK_URL;
-  if (!webhook) {
-    console.error("[lead] CLINT_WEBHOOK_URL não configurada");
-    return res.status(500).json({ error: "Webhook não configurado" });
-  }
-
   const b = (req.body && typeof req.body === "object") ? req.body : {};
 
   const faltando = CAMPOS_OBRIGATORIOS.filter((c) => !String(b[c] || "").trim());
@@ -49,6 +43,17 @@ module.exports = async function handler(req, res) {
     origem: "Landing Acelera Obra",
     enviado_em: new Date().toISOString()
   };
+
+  // Rede de segurança: o lead é sempre registrado no log da Vercel ANTES de
+  // tentar enviar. Assim, mesmo com o webhook fora do ar ou ainda não
+  // configurado, nenhum lead se perde — dá para recuperar em Vercel → Logs.
+  console.log("[lead] recebido:", JSON.stringify(payload));
+
+  const webhook = process.env.CLINT_WEBHOOK_URL;
+  if (!webhook) {
+    console.error("[lead] CLINT_WEBHOOK_URL não configurada — lead salvo apenas no log acima");
+    return res.status(500).json({ error: "Webhook não configurado" });
+  }
 
   try {
     const r = await fetch(webhook, {
