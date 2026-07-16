@@ -406,6 +406,9 @@
     { key:"whatsapp", type:"tel", eyebrow:"Prazer, {first}!",
       question:"Qual é o seu WhatsApp?", placeholder:"(00) 00000-0000" },
 
+    { key:"email", type:"email", eyebrow:"Anotado, {first}!",
+      question:"Qual é o seu e-mail?", placeholder:"Digite seu e-mail" },
+
     { key:"tipo_loja", type:"select", eyebrow:"Vamos conhecer o seu negócio...",
       question:"Qual loja você tem?",
       placeholder:"Selecione o tipo de loja",
@@ -425,7 +428,7 @@
     { key:"objetivo", type:"select", eyebrow:"Foco no que importa",
       question:"Qual é o seu principal objetivo hoje?",
       placeholder:"Selecione o seu objetivo",
-      options:["Aumentar Volume de Clientes","Aumentar o Faturamento","Treinar o Time de Vendas","Todas as Opções Acima"] },
+      options:["Aumentar Volume de Clientes","Aumentar o Faturamento","Treinar o Time de Vendas","Posicionamento Digital","Alavancas comerciais","Girar o estoque","Todas as Opções Acima"] },
 
     { key:"urgencia", type:"select", eyebrow:"Para finalizar,",
       question:"O quão urgente é para você alcançar esse(s) objetivo(s)?",
@@ -436,6 +439,7 @@
   var BRAND = [
     { eyebrow:"", title:"Junte-se às <b>maiores</b>", sub:"Veja abaixo as lojas que contaram com a ajuda do Acelera Obra para alavancar suas vendas." },
     { eyebrow:"Time completo", title:"O time de <b>marketing e vendas</b> da sua loja", sub:"Tráfego pago, CRM, treinamento comercial e IA no atendimento." },
+    { eyebrow:"Sem enrolação", title:"Contato direto, <b>sem spam</b>", sub:"Usamos seus dados apenas para falar sobre o crescimento da sua loja." },
     { eyebrow:"Especialistas", title:"Especialistas no seu <b>tipo de loja</b>", sub:"Tintas, construção, elétrica, hidráulica e pisos — a gente entende do seu mercado." },
     { eyebrow:"Sua loja", title:"Feito sob medida para a <b>sua loja</b>", sub:"Estratégia pensada para a realidade do seu negócio." },
     { eyebrow:"Alcance", title:"Atendemos lojas de <b>todo o Brasil</b>", sub:"Onde a sua loja estiver, a gente ajuda a vender mais." },
@@ -690,6 +694,7 @@
     var a = state.answers;
     var msg = "Olá! Acabei de preencher o formulário do Acelera Obra e gostaria de um atendimento prioritário.";
     if(a.nome) msg += "\nNome: " + a.nome;
+    if(a.email) msg += "\nE-mail: " + a.email;
     if(a.loja) msg += "\nLoja: " + a.loja;
     if(a.tipo_loja) msg += "\nTipo: " + a.tipo_loja;
     if(a.cidade_estado) msg += "\nCidade/UF: " + a.cidade_estado;

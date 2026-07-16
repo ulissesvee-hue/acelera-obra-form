@@ -54,7 +54,7 @@ acelera-obra-form/
 
 ## Campos coletados (`state.answers`)
 
-`nome`, `whatsapp`, `tipo_loja`, `loja`, `cidade_estado`, `faturamento`, `objetivo`, `urgencia`.
+`nome`, `whatsapp`, `email`, `tipo_loja`, `loja`, `cidade_estado`, `faturamento`, `objetivo`, `urgencia`.
 
 ## Identidade visual
 
