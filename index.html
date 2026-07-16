@@ -41,12 +41,13 @@
   ::selection{background:var(--yellow);color:var(--ink)}
 
   /* ---------- Layout ---------- */
+  /* ocupa a largura toda em qualquer monitor — o conteúdo é centralizado
+     dentro de cada painel, então não sobram faixas vazias nas laterais */
   .app{
     display:grid;
     grid-template-columns:minmax(0,42%) minmax(0,58%);
     min-height:100dvh;
-    max-width:1440px;
-    margin:0 auto;
+    width:100%;
   }
 
   /* ---------- Left / brand panel ---------- */
@@ -78,7 +79,7 @@
   .brand__logo{width:190px;position:relative;z-index:2}
   .brand__body{
     position:relative;z-index:2;
-    margin-top:auto;padding-top:40px;
+    margin-block:auto;padding:40px 0; /* centraliza entre a logo (topo) e o rodapé */
     max-width:440px;
   }
   .brand__eyebrow{
@@ -156,9 +157,13 @@
     font-size:12px;color:var(--muted);font-weight:500;
   }
 
+  /* coluna centralizada: em monitores largos o formulário não estica */
+  .panel__top,.progress,.progress__meta,.done{
+    max-width:640px;width:100%;margin-inline:auto;
+  }
   .stage{
-    flex:1;display:flex;flex-direction:column;justify-content:center;
-    padding:26px 0;max-width:640px;width:100%;
+    flex:1;display:flex;flex-direction:column;justify-content:flex-start;
+    padding:38px 0 26px;max-width:640px;width:100%;margin-inline:auto;
   }
   .step{display:none}
   .step.is-active{display:block;animation:rise .45s var(--ease) both}
